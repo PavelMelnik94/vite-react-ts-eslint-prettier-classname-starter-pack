@@ -1,26 +1,44 @@
 import './App.css';
 
-import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
+import { getTodos, postTodo } from './api';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const queryClient = useQueryClient();
 
-  const handle = {
-    plus: () => {
-      setCount(count + 1);
+  // Queries
+  const query = useQuery('todos', getTodos);
+
+  // Mutations
+  const mutation = useMutation(postTodo, {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries('todos');
     },
-    minus: () => {
-      setCount(count - 1);
-    },
-  };
+  });
+
+  console.log(query, 'консоль query');
+  console.log(mutation, 'консоль mutation');
 
   return (
-    <div className="App">
-      <h1>count: {count}</h1>
-      <div>
-        <button onClick={handle.plus}>увеличить +</button>
-        <button onClick={handle.minus}>уменьшить -</button>
-      </div>
+    <div>
+      <ul>
+        {!query.data
+          ? 'not data'
+          : query.data.map((todo) => <li key={todo.id}>{todo.title}</li>)}
+      </ul>
+      {query.isLoading && <p>Loading...</p>}
+      <button
+        onClick={() => {
+          mutation.mutate({
+            id: Date.now(),
+
+            title: 'Do Laundry',
+          });
+        }}>
+        Add Todo
+      </button>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 {
   "name": "react-vite",
   "version": "0.0.0",
+  "description": "",
+  "main": "main.jsx",
+  "license": "ISC",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

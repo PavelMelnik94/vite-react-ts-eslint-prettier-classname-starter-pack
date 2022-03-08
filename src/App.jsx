@@ -36,7 +36,8 @@ function App() {
 
             title: 'Do Laundry',
           });
-        }}>
+        }}
+      >
         Add Todo
       </button>
     </div>
